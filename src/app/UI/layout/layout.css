@@ -1,0 +1,35 @@
+.app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.header {
+  height: 60px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+.inside{
+    display: grid;
+    grid-template-columns: 15% 85%;
+
+}
+.main {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+}
+@media (max-width: 769px) {
+  .inside{
+    grid-template-columns: 100%;
+  }
+  .main{
+        margin-top: 20px;
+  }
+}

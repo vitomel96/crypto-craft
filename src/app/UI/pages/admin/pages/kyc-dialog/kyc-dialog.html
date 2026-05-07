@@ -1,0 +1,48 @@
+<h2 mat-dialog-title>Verificación KYC</h2>
+
+<mat-dialog-content class="kyc-content">
+
+  <!-- STATUS -->
+  <div class="kyc-status">
+    <span [ngClass]="{
+      'status-pending': data.status === 'pending',
+      'status-approved': data.status === 'approved',
+      'status-rejected': data.status === 'rejected'
+    }">
+      {{ data.status }}
+    </span>
+  </div>
+
+  <!-- DOCUMENT -->
+  <div class="kyc-section">
+    <h3>Documento</h3>
+    <img [src]="data.document_url" class="kyc-img">
+  </div>
+
+  <!-- SELFIE -->
+  <div class="kyc-section">
+    <h3>Selfie</h3>
+    <img [src]="data.selfie_url" class="kyc-img">
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  <button 
+    mat-button 
+    color="warn"
+    (click)="reject()"
+    [disabled]="data.status === 'rejected'">
+    Rechazar
+  </button>
+
+  <button 
+    mat-raised-button 
+    color="primary"
+    (click)="approve()"
+    [disabled]="data.status === 'approved'">
+    Aprobar
+  </button>
+
+</mat-dialog-actions>

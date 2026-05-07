@@ -1,0 +1,23 @@
+<!-- BOTÓN MOBILE -->
+<button class="menu-toggle" (click)="toggleSidebar()">
+  ☰
+</button>
+
+<aside class="sidebar" [class.open]="isOpen">
+  <div class="logo">CoinDash</div>
+
+  <nav>
+    <a routerLink="/market" routerLinkActive="active">📊 Market</a>
+    <a routerLink="/trade/BTCUSDT" routerLinkActive="active">💰 Trade</a>
+    <a routerLink="/wallet" routerLinkActive="active">👛 Wallet</a>
+    <a routerLink="/profile" routerLinkActive="active">👤 Profile</a>
+
+    <a *ngIf="isAdmin" routerLink="/admin" routerLinkActive="active">
+      ⚙️ Admin
+    </a>
+        <a style="cursor: pointer" (click)="signOut()"> 🚪 Logout</a>
+  </nav>
+</aside>
+
+<!-- overlay oscuro -->
+<div class="overlay" *ngIf="isOpen" (click)="toggleSidebar()"></div>

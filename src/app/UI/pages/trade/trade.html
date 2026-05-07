@@ -1,0 +1,156 @@
+<div class="trade-layout" *ngIf="symbol">
+
+  <!-- 📈 CHART -->
+  <div class="chart">
+    <div class="chart-header">
+      {{ symbol }}
+    </div>
+
+<div class="chart-body" style="margin-top: 10px;">
+  <div id="tv-chart"></div>
+</div>
+  </div>
+
+  <!-- 💰 TRADE PANEL -->
+  <div class="trade-panel">
+
+    <!-- Balance -->
+    <div class="balance" style="margin-top: 10px;">
+      Balance disponible: 
+      <span *ngIf="balance !== null">
+        ${{ balance | number:'1.2-2' }}
+      </span>
+      <span *ngIf="balance === null" class="loading">
+        Cargando...
+      </span>
+    </div>
+
+    <!-- Coin -->
+    <div class="coin-card">
+      <div class="left">
+        <div class="icon"></div>
+        <div>
+          <div class="name">{{ baseSymbol }}</div>
+          <div class="symbol">{{ symbol }}</div>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="price">
+          ${{ price | number:'1.2-2' }}
+        </div>
+
+        <div 
+          class="change"
+          [class.green]="change > 0"
+          [class.red]="change < 0"
+        >
+          {{ change | number:'1.2-2' }}%
+        </div>
+      </div>
+    </div>
+
+    <!-- Precio -->
+    <div class="current-price" style="margin-top: 10px;">
+      Precio actual: <b>${{ price | number:'1.2-2' }} USD</b>
+    </div>
+
+    <!-- Buy / Sell -->
+    <div class="tabs" style="margin-top: 10px;">
+      <button 
+        [class.active]="type === 'buy'"
+        (click)="type = 'buy'"
+      >Buy</button>
+
+      <button 
+        [class.active]="type === 'sell'"
+        (click)="type = 'sell'"
+      >Sell</button>
+    </div>
+
+    <!-- Market / Limit -->
+    <div class="tabs secondary" style="margin-top: 10px;">
+      <button 
+        (click)="orderType = 'market'"
+        [class.active]="orderType === 'market'"
+      >Market</button>
+
+      <button 
+        (click)="orderType = 'limit'"
+        [class.active]="orderType === 'limit'"
+      >Limit</button>
+    </div>
+
+    <!-- Inputs -->
+    <input 
+      *ngIf="orderType === 'limit'"
+      type="number"
+      placeholder="Ingrese precio"
+      [(ngModel)]="priceInput"
+    />
+
+    <input 
+    style="margin-top: 10px;"
+      type="number"
+      placeholder="Ingrese cantidad"
+      [(ngModel)]="amount"
+    />
+
+    <div class="total" style="margin-top: 10px;">
+      Total: {{ getTotal() | number:'1.2-2' }} USDT
+    </div>
+
+    <!-- CTA -->
+<button 
+style="margin-top: 10px;"
+  class="cta"
+  [disabled]="amount <= 0 || (orderType === 'limit' && priceInput <= 0)"
+  [class.buy]="type === 'buy'"
+  [class.sell]="type === 'sell'"
+  (click)="executeTrade()"
+>
+  {{ type === 'buy' ? 'Buy' : 'Sell' }} {{ baseSymbol }}
+</button>
+  </div>
+
+  <!-- 📊 ORDER BOOK -->
+  <div class="orderbook" style="margin-top: 10px;">
+
+    <div class="ob-header">Order Book</div>
+
+    <div class="header-row">
+      <span>Price</span>
+      <span>Amount</span>
+      <span>Amount</span>
+      <span>Price</span>
+    </div>
+
+    <div class="ob-body">
+
+      <!-- BIDS -->
+      <div 
+        class="row"
+        *ngFor="let bid of orderbook.bids"
+      >
+        <span class="green">{{ bid.price }}</span>
+        <span>{{ bid.amount }}</span>
+        <span>{{ bid.total }}</span>
+        <span></span>
+      </div>
+
+      <!-- ASKS -->
+      <div 
+        class="row"
+        *ngFor="let ask of orderbook.asks"
+      >
+        <span></span>
+        <span>{{ ask.total }}</span>
+        <span>{{ ask.amount }}</span>
+        <span class="red">{{ ask.price }}</span>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

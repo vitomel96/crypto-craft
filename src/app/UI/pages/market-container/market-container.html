@@ -1,0 +1,98 @@
+<div class="market-container">
+<!-- 🔥 LOADING -->
+<div *ngIf="loading" class="loading">
+  Cargando mercado...
+</div>
+
+<!-- 🔥 CONTENIDO -->
+<div *ngIf="!loading">
+
+  <!-- 🔥 TOP GAINERS -->
+  <div class="top-gainers">
+
+    <div class="section-header">
+      🔥 Top Gainers
+    </div>
+
+    <div class="gainers-grid">
+
+      <div 
+        class="gainer-card"
+        *ngFor="let coin of topGainers"
+        (click)="goToTrade(coin)"
+      >
+        <div class="symbol">{{ coin.symbol }}</div>
+
+        <div 
+          class="change"
+          [class.green]="coin.change > 0"
+          [class.red]="coin.change < 0"
+        >
+          {{ coin.change | number:'1.2-2' }}%
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- 🔥 HEADER MARKET -->
+  <div class="market-header">
+    <span>Coin</span>
+    <span style="text-align: center;">Chart</span>
+    <span style="text-align: end;">Price</span>
+    <span style="text-align: end;">24h</span>
+  </div>
+
+  <!-- 🔥 MARKET LIST -->
+  <div 
+    class="coin-card"
+    *ngFor="let coin of filteredCoins; trackBy: trackBySymbol"
+    (click)="goToTrade(coin)"
+  >
+
+    <!-- COIN -->
+    <div class="coin">
+      <div class="icon"></div>
+
+      <div class="info">
+        <div class="name">{{ coin.name }}</div>
+        <div class="symbol">{{ coin.symbol }}</div>
+      </div>
+    </div>
+
+    <!-- CHART -->
+    <div class="chart">
+      <app-sparkline 
+        *ngIf="coin.history?.length"
+        [data]="coin.history"
+      ></app-sparkline>
+    </div>
+
+    <!-- PRICE -->
+    <div 
+      class="price"
+      [class.up]="coin.prevPrice && coin.price > coin.prevPrice"
+      [class.down]="coin.prevPrice && coin.price < coin.prevPrice"
+    >
+      ${{ coin.price | number:'1.2-2' }}
+    </div>
+
+    <!-- CHANGE -->
+    <div 
+      class="change"
+      [class.green]="coin.change > 0"
+      [class.red]="coin.change < 0"
+    >
+      {{ coin.change | number:'1.2-2' }}%
+    </div>
+
+  </div>
+
+  <!-- 🔥 EMPTY STATE -->
+  <div *ngIf="!filteredCoins.length" class="empty">
+    No hay monedas disponibles
+  </div>
+
+</div>
+</div>

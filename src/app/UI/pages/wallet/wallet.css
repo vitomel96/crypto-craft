@@ -1,0 +1,249 @@
+/* ===== ROOT ===== */
+.wallet {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: #f5f5f5; /* gris claro fondo */
+  padding: 20px;
+}
+
+/* ===== CARD ===== */
+.card {
+  background: #ffffff; /* blanco */
+  border: 1px solid #e5e7eb; /* gris suave */
+  border-radius: 14px;
+  padding: 20px;
+  color: #374151; /* gris oscuro texto */
+}
+
+/* ===== BALANCE ===== */
+.balance-card .amount {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #111827;
+}
+
+/* ===== METHODS ===== */
+.methods {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.methods button {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  color: #6b7280;
+  transition: 0.2s;
+}
+button:disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+.methods button:hover {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.methods .active {
+  background: #22c55e;
+  color: white;
+  border-color: #22c55e;
+}
+
+/* ===== WALLET LIST ===== */
+.wallet-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  background: #fafafa;
+  transition: 0.2s;
+}
+
+.wallet-item:hover {
+  background: #f3f4f6;
+}
+
+.wallet-item.selected {
+  border-color: #22c55e;
+  background: #ecfdf5; /* verde muy suave */
+}
+
+/* ADDRESS */
+.address {
+  font-size: 12px;
+  color: #6b7280;
+  word-break: break-all;
+}
+
+/* ACTIONS */
+.wallet-item .actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* BUTTONS */
+.wallet-item button {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.wallet-item button:hover {
+  background: #e5e7eb;
+}
+
+/* ===== UPLOAD ===== */
+.upload-box {
+  border: 2px dashed #d1d5db;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  margin: 15px 0;
+  color: #6b7280;
+  background: #fafafa;
+  transition: 0.2s;
+}
+
+.upload-box:hover {
+  background: #f3f4f6;
+}
+
+/* PREVIEW */
+.preview-img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+
+/* ===== TRANSACTIONS ===== */
+.tx {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* STATUS */
+.status.pending {
+  color: #f59e0b;
+}
+
+.status.completed {
+  color: #22c55e;
+}
+
+.status.rejected {
+  color: #ef4444;
+}
+
+.withdraw-methods-list {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.method-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #e5e7eb;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  background: #fff;
+}
+.method-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.method-meta {
+  font-size: 12px;
+  color: #6b7280;
+  display: flex;
+  flex-direction: column;
+}
+
+.fee {
+  color: #111827;
+  font-weight: 500;
+}
+
+.limits {
+  font-size: 11px;
+}
+.method-card:hover {
+  border-color: #6366f1;
+}
+
+.method-card.selected {
+  border-color: #6366f1;
+  background: #eef2ff;
+}
+
+.method-card img {
+  width: 35px;
+  height: 35px;
+}
+
+.withdraw-info {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #6b7280;
+}
+.withdraw-summary {
+  margin-top: 15px;
+  padding: 14px;
+  border-radius: 12px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #374151;
+}
+
+.summary-row strong {
+  font-weight: 600;
+  color: #111827;
+}
+
+.summary-row.total {
+  font-size: 14px;
+}
+
+.highlight {
+  color: #16a34a;
+  font-size: 16px;
+}
+
+.divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 6px 0;
+}

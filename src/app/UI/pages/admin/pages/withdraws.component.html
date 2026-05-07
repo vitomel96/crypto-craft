@@ -1,0 +1,62 @@
+<table class="admin-table">
+
+  <thead>
+    <tr>
+      <th>Usuario</th>
+      <th>Monto</th>
+      <th>Método</th>
+      <th>Fee</th>
+      <th>Neto</th>
+      <th>Status</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let w of withdrawals">
+
+      <td>{{ w.user_email }}</td>
+
+      <td>
+        {{ w.amount | number:'1.0-2' }} {{ w.currency }}
+      </td>
+
+      <td>{{ w.method_name }}</td>
+
+      <td>
+        {{ w.fee | number:'1.0-2' }}
+      </td>
+
+      <td>
+        {{ w.net_amount | number:'1.0-2' }}
+      </td>
+
+      <td>
+        <span [ngClass]="w.status">
+          {{ w.status }}
+        </span>
+      </td>
+
+      <td>
+
+        <!-- SOLO SI PENDING -->
+        <ng-container *ngIf="w.status === 'pending'">
+
+          <button class="btn-success"
+                  (click)="updateStatus(w.id, 'approved')">
+            Aprobar
+          </button>
+
+          <button class="btn-danger"
+                  (click)="updateStatus(w.id, 'rejected')">
+            Rechazar
+          </button>
+
+        </ng-container>
+
+      </td>
+
+    </tr>
+  </tbody>
+
+</table>

@@ -1,1 +1,60 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --bg: #f5f7fa;
+  --card: #ffffff;
+  --border: #e6e8eb;
+
+  --primary: #8fd14f;  
+  --primary-dark: #6fb73d;
+
+  --text: #1e2329;
+  --text-light: #6b7280;
+
+  --green: #16c784;
+  --red: #ea3943;
+}
+body{
+    padding: 0;
+    margin: 0;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.text-white{
+  color: #fff!important;
+}
+input{
+      border-radius: 5px;
+    padding: 5px;
+    margin-left: 10px;
+    border-style: double;
+}
+
+/* ===== PRIMARY BUTTON ===== */
+.btn-primary {
+  background: #22c55e;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-primary:hover {
+  background: #16a34a;
+}
+
+/* ===== SECONDARY BUTTON ===== */
+.btn-secondary {
+  background: #f3f4f6; /* gris claro */
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-secondary:hover {
+  background: #e5e7eb;
+}

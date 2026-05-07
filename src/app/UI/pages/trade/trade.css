@@ -1,0 +1,127 @@
+.trade {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* balance */
+.balance {
+  font-size: 14px;
+}
+
+.loading {
+  color: var(--primary);
+}
+
+/* coin card */
+.coin-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--card);
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #eaecef;
+}
+
+.symbol {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.price {
+  font-weight: bold;
+}
+
+.change {
+  font-size: 12px;
+}
+
+.green {
+  color: var(--green);
+}
+
+.red {
+  color: var(--red);
+}
+
+/* precio actual */
+.current-price {
+  font-size: 14px;
+}
+
+/* tabs */
+.tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.tabs button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+.tabs button.active {
+  background: var(--primary);
+  color: white;
+  border: none;
+}
+
+.tabs.secondary button.active {
+  background: var(--primary);
+}
+
+/* inputs */
+input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+/* total */
+.total {
+  font-size: 14px;
+}
+
+/* botón */
+.cta {
+  background: var(--primary);
+  color: white;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+}
+
+/* orderbook */
+.orderbook {
+  background: var(--card);
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.header-row,
+.row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  font-size: 12px;
+  padding: 4px 0;
+}

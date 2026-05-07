@@ -1,0 +1,248 @@
+<div class="wallet">
+
+  <!-- 💰 BALANCE -->
+  <div class="card balance-card" *ngIf="user?.balance !== undefined">
+    <h2>Balance</h2>
+    <div class="amount">{{ user.balance | currency }}</div>
+<div style="display: flex; gap: 10px; margin-top: 20px;">
+
+    <button (click)="openDeposit()" class="btn-primary">
+      + Cargar saldo
+    </button>
+    <button (click)="openWithdraw()" class="btn-secondary">
+  Retirar
+</button>
+</div>
+
+  </div>
+
+  <!-- 💸 DEPOSIT -->
+  <div class="card" *ngIf="showDeposit">
+
+    <h3>Agregar fondos</h3>
+
+    <!-- 🔹 SELECT METHOD -->
+    <div class="methods">
+      <button 
+        (click)="selectMethod('crypto')" 
+        [class.active]="method==='crypto'">
+        Crypto
+      </button>
+
+
+    </div>
+
+    <!-- 🔹 CRYPTO -->
+    <div *ngIf="method === 'crypto'">
+
+      <div class="wallet-list">
+
+  <div *ngFor="let w of wallets"
+     class="wallet-item"
+     [class.selected]="selectedWallet?.id === w.id">
+
+  <div class="wallet-info">
+    <strong>{{ w.network }}</strong>
+    <p class="address">{{ w.address }}</p>
+
+    <!-- 💰 Amount -->
+<div class="amount-box">
+  <label>Monto</label>
+  <input 
+    type="number"
+    [(ngModel)]="amount"
+    placeholder="Ej: 100"
+  />
+</div>
+  </div>
+
+  <div class="actions">
+    <button (click)="selectWallet(w)">
+      Seleccionar
+    </button>
+
+    <button (click)="openQr(w.qr_image_url)">
+      Ver QR
+    </button>
+  </div>
+
+</div>
+
+      </div>
+
+    </div>
+
+    <!-- 🔹 UPLOAD -->
+    <div class="upload-box" (click)="fileInput.click()">
+      
+      <ng-container *ngIf="!proofPreview; else preview">
+        <span>📤 Subir comprobante</span>
+      </ng-container>
+
+      <ng-template #preview>
+        <img [src]="proofPreview" class="preview-img" />
+      </ng-template>
+
+      <input #fileInput type="file" (change)="onProof($event)" hidden />
+    </div>
+
+    <button 
+      (click)="submitDeposit()" 
+      class="btn-primary"
+      [disabled]="!proofFile || (method === 'crypto' && !selectedWallet)">
+      Enviar comprobante
+    </button>
+
+  </div>
+<!-- 💸 WITHDRAW -->
+<div class="card" *ngIf="showWithdraw">
+
+  <h3>Retirar fondos</h3>
+  <h4 style="margin-top: 10px;">Seleccionar metodo</h4>
+  <hr style="margin: 20px 0;" />
+  <!-- 🔹 METHODS -->
+<div class="withdraw-methods-list">
+  <div 
+    *ngFor="let m of withdrawMethods"
+    (click)="selectWithdrawMethod(m)"
+    [class.selected]="selectedWithdrawMethod?.id === m.id"
+    class="method-card">
+
+    <img *ngIf="m.image_url" [src]="m.image_url" />
+
+    <div class="method-content">
+      <strong>{{ m.name }}</strong>
+      <p>{{ m.description }}</p>
+
+      <!-- 🔥 FEE -->
+      <div class="method-meta">
+        <span class="fee">
+        Fee: {{ m.fee | number:'1.0-2' }} {{ m.fee_type === 'percent' ? '%' : m.currency }}
+
+        </span>
+
+        <span class="limits">
+       Min: {{ m.min_withdraw | number:'1.0-2' }} {{m.currency}} |
+Max: {{ m.max_withdraw | number:'1.0-2' }} {{m.currency}}
+        </span>
+      </div>
+    </div>
+
+  </div>
+</div>
+  <!-- 🔹 FORM DINÁMICO -->
+  <div *ngIf="selectedWithdrawMethod">
+
+    <!-- 💰 AMOUNT -->
+    <div class="form-group">
+      <label>Monto</label>
+      <input 
+  type="number"
+  [(ngModel)]="withdrawAmount"
+  [min]="selectedWithdrawMethod?.min_withdraw"
+  [max]="selectedWithdrawMethod?.max_withdraw"
+  placeholder="Ej: 100"
+/>
+    </div>
+
+    <!-- 🔥 CAMPOS DINÁMICOS -->
+    <div *ngFor="let f of selectedWithdrawMethod.fields">
+
+      <div class="form-group">
+        <label>{{ f.label }}</label>
+
+        <input 
+          *ngIf="f.type === 'text'"
+          [(ngModel)]="withdrawData[f.name]"
+        />
+
+        <input 
+          *ngIf="f.type === 'number'"
+          type="number"
+          [(ngModel)]="withdrawData[f.name]"
+        />
+
+        <select 
+          *ngIf="f.type === 'select'"
+          [(ngModel)]="withdrawData[f.name]">
+          <option *ngFor="let o of f.options" [value]="o">
+            {{ o }}
+          </option>
+        </select>
+
+      </div>
+
+    </div>
+
+    <!-- 🔥 INFO -->
+<div class="withdraw-summary">
+
+  <div class="summary-row">
+    <span>Fee</span>
+    <strong>
+      {{ selectedWithdrawMethod.fee | number:'1.0-2' }}
+      {{ selectedWithdrawMethod.fee_type === 'percent' ? '%' : selectedWithdrawMethod.currency }}
+    </strong>
+  </div>
+
+  <div class="summary-row">
+    <span>Mínimo</span>
+    <strong>
+      {{ selectedWithdrawMethod.min_withdraw | number:'1.0-2' }}
+      {{ selectedWithdrawMethod.currency }}
+    </strong>
+  </div>
+
+  <div class="summary-row">
+    <span>Máximo</span>
+    <strong>
+      {{ selectedWithdrawMethod.max_withdraw | number:'1.0-2' }}
+      {{ selectedWithdrawMethod.currency }}
+    </strong>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 🔥 PREVIEW DINÁMICO -->
+  <div class="summary-row total">
+    <span>Recibirás</span>
+    <strong class="highlight">
+      {{ netAmount | number:'1.0-2' }}
+      {{ selectedWithdrawMethod.currency }}
+    </strong>
+  </div>
+
+</div>
+    <!-- 🔥 SUBMIT -->
+    <button 
+    style="margin-top: 10px;"
+      (click)="submitWithdraw()"
+      class="btn-primary"
+      [disabled]="!withdrawAmount">
+      Confirmar retiro
+    </button>
+
+  </div>
+
+</div>
+  <!-- 📊 HISTORIAL -->
+  <!-- <div class="card">
+
+    <h3>Historial</h3>
+
+    <div *ngFor="let tx of transactions" class="tx">
+
+      <div>
+        <strong>{{ tx.amount | currency }}</strong>
+        <span>{{ tx.method }}</span>
+      </div>
+
+      <div class="status" [ngClass]="tx.status">
+        {{ tx.status }}
+      </div>
+
+    </div>
+
+  </div> -->
+
+</div>

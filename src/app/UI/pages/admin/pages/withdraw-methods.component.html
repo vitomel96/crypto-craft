@@ -1,0 +1,244 @@
+<div class="withdraw-methods">
+
+  <!-- 🔹 HEADER -->
+  <div class="header">
+    <h2>Métodos de retiro</h2>
+
+    <button class="btn-primary" (click)="showForm = !showForm">
+      {{ showForm ? 'Cancelar' : '+ Crear método' }}
+    </button>
+  </div>
+
+  <!-- 🔥 TABLA (igual, solo limpio visual) -->
+  <table mat-table [dataSource]="methods" class="mat-elevation-z2 full-width">
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Nombre</th>
+      <td mat-cell *matCellDef="let m">
+        <div class="method-info">
+          <img *ngIf="m.image_url" [src]="m.image_url" />
+          <div>
+            <strong>{{ m.name }}</strong>
+            <p class="desc">{{ m.description }}</p>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef>Tipo</th>
+      <td mat-cell *matCellDef="let m">
+        <span class="badge">{{ m.type }}</span>
+      </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let m">
+        <span [ngClass]="m.is_active ? 'status-active' : 'status-rejected'">
+          {{ m.is_active ? 'Activo' : 'Inactivo' }}
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+    <td mat-cell *matCellDef="let m">
+  <button class="btn-success" (click)="toggle(m.id)">
+    {{ m.is_active ? 'Desactivar' : 'Activar' }}
+  </button>
+
+  <!-- 🔥 EDIT -->
+  <button class="btn-secondary" (click)="edit(m)">
+    Editar
+  </button>
+</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="cols"></tr>
+    <tr mat-row *matRowDef="let row; columns: cols;"></tr>
+
+  </table>
+
+  <!-- 🔥 FORMULARIO PRO -->
+  <div *ngIf="showForm" class="admin-section withdraw-form">
+
+    <h3 class="section-title">Configuración del método</h3>
+
+    <!-- 🔥 GRID PRINCIPAL -->
+    <div class="form-main-grid">
+
+      <!-- UPLOAD -->
+      <div class="upload-container">
+        <label class="upload-box">
+          <input type="file" (change)="onFile($event)" hidden />
+
+          <div *ngIf="!preview" class="upload-placeholder">
+            ☁️
+            <span>Subir logo</span>
+          </div>
+
+          <img *ngIf="preview" [src]="preview" />
+        </label>
+      </div>
+
+      <!-- CAMPOS -->
+      <div class="form-fields">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input class="input" [(ngModel)]="name" placeholder="Ej: Binance" />
+          </div>
+
+          <div class="form-group">
+            <label>Tipo</label>
+            <select [(ngModel)]="type">
+              <option value="crypto">Crypto</option>
+              <option value="bank">Banco</option>
+              <option value="wallet">Wallet</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Descripción</label>
+          <input [(ngModel)]="description" placeholder="Descripción del método" />
+        </div>
+
+      </div>
+
+    </div>
+<!-- 🔥 NUEVOS CAMPOS FINANCIEROS -->
+
+<div class="form-row">
+  <div class="form-group">
+    <label>Moneda</label>
+    <input [(ngModel)]="currency" placeholder="Ej: USD, COP, BTC" />
+  </div>
+
+  <div class="form-group">
+    <label>Tasa de conversión</label>
+    <div class="input-group">
+      <span>1 USD =</span>
+      <input [(ngModel)]="conversionRate" type="number" placeholder="0.00" />
+    </div>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <label>Cargos</label>
+    <div class="input-group">
+      <input [(ngModel)]="fee" type="number" placeholder="0" />
+      <select [(ngModel)]="feeType">
+        <option value="percent">%</option>
+        <option value="fixed">Fijo</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Tiempo de procesamiento</label>
+    <div class="input-group">
+      <input [(ngModel)]="processingTime" type="number" placeholder="Ej: 10" />
+      <select [(ngModel)]="processingUnit">
+        <option value="minutes">Min</option>
+        <option value="hours">Horas</option>
+        <option value="days">Días</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <label>Retirada mínima</label>
+    <div class="input-group">
+      <input [(ngModel)]="minWithdraw" type="number" />
+      <span class="suffix">USD</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Retirada máxima</label>
+    <div class="input-group">
+      <input [(ngModel)]="maxWithdraw" type="number" />
+      <span class="suffix">USD</span>
+    </div>
+  </div>
+</div>
+    <!-- 🔥 CAMPOS DINÁMICOS -->
+    <div class="fields-section">
+
+      <div class="fields-header">
+        <h3>Campos personalizados</h3>
+      </div>
+
+      <div class="builder-grid" >
+
+        <input [(ngModel)]="newField.name" placeholder="Titulo" />
+        <input [(ngModel)]="newField.label" placeholder="Contenido" />
+
+        <select [(ngModel)]="newField.type">
+          <option value="text">Texto</option>
+          <option value="number">Número</option>
+          <option value="select">Lista</option>
+        </select>
+
+        <label class="checkbox">
+          <input type="checkbox" [(ngModel)]="newField.required" />
+          Requerido
+        </label>
+
+      </div>
+        <button style="margin-top: 10px;" class="btn-primary" (click)="addField()">+ Añadir campo</button>
+
+
+      <!-- OPTIONS -->
+      <div *ngIf="newField.type === 'select'" class="options-box">
+        <input #opt placeholder="Agregar opción" />
+        <button (click)="addOption(opt)" class="btn-primary small">Agregar</button>
+
+        <div class="options-list">
+          <span *ngFor="let o of newField.options" class="option-item">
+            {{ o }}
+          </span>
+        </div>
+      </div>
+
+      <!-- LIST -->
+      <div class="fields-list">
+
+        <div *ngIf="!fields.length" class="empty">
+          No hay campos aún
+        </div>
+
+        <div *ngFor="let f of fields; let i = index" class="field-row">
+
+          <div>
+            <strong>{{ f.label }}</strong>
+            <span>({{ f.type }})</span>
+          </div>
+
+          <button class="btn-danger small" (click)="removeField(i)">
+            ✕
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- 🔥 FOOTER -->
+    <div class="footer">
+    <button (click)="save()" class="btn-success big">
+  {{ isEdit ? 'Actualizar método' : 'Guardar método' }}
+</button>
+    </div>
+
+  </div>
+
+</div>

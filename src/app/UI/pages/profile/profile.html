@@ -1,0 +1,113 @@
+<ng-container *ngIf="userService.user$ | async as user">
+
+  <!-- 🔥 PROFILE -->
+  <div class="card profile-card">
+
+    <div class="avatar-wrapper">
+      <img 
+        [src]="avatarPreview || user.avatarUrl || 'https://via.placeholder.com/100'" 
+        class="avatar"
+      />
+
+      <label class="avatar-upload">
+        Cambiar
+        <input type="file" (change)="onAvatarChange($event)" hidden />
+      </label>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="saveProfile()">
+
+      <div class="grid">
+        <input placeholder="Nombre" formControlName="firstName" />
+        <input placeholder="Apellido" formControlName="lastName" />
+        <input placeholder="Teléfono" formControlName="phone" />
+        <input placeholder="País" formControlName="country" />
+      </div>
+
+      <button type="submit" class="btn-primary">
+        Guardar cambios
+      </button>
+
+    </form>
+
+    <div class="info">
+      <div>
+        <span>Email</span>
+        <strong>{{ user.email }}</strong>
+      </div>
+
+      <div>
+        <span>Balance</span>
+        <strong class="balance">
+          {{ user.balance | currency }}
+        </strong>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 🔥 KYC -->
+  <div class="card kyc-card">
+
+    <div class="kyc-header">
+      <h3>Verificación</h3>
+
+      <span class="status"
+        [ngClass]="user.kycStatus">
+        {{ user.kycStatus }}
+      </span>
+    </div>
+
+    <!-- estados -->
+    <div *ngIf="user.kycStatus === 'approved'" class="kyc-box approved">
+      ✅ Cuenta verificada
+    </div>
+
+    <div *ngIf="user.kycStatus === 'pending'" class="kyc-box pending">
+      ⏳ Estamos revisando tus documentos
+    </div>
+
+    <div *ngIf="user.kycStatus === 'rejected'" class="kyc-box rejected">
+      ❌ Verificación rechazada
+    </div>
+
+    <!-- upload -->
+    <div *ngIf="user.kycStatus === 'none'" class="kyc-upload">
+
+    <div class="upload-grid">
+
+  <!-- DOCUMENT -->
+  <label class="upload-box">
+    <ng-container *ngIf="!documentPreview; else docPreview">
+      <span>📄 Documento</span>
+    </ng-container>
+
+    <ng-template #docPreview>
+      <img [src]="documentPreview" class="preview-img" />
+    </ng-template>
+
+    <input type="file" (change)="onFile($event, 'document')" hidden />
+  </label>
+
+  <!-- SELFIE -->
+  <label class="upload-box">
+    <ng-container *ngIf="!selfiePreview; else selfiePreviewTpl">
+      <span>🤳 Selfie</span>
+    </ng-container>
+
+    <ng-template #selfiePreviewTpl>
+      <img [src]="selfiePreview" class="preview-img" />
+    </ng-template>
+
+    <input type="file" (change)="onFile($event, 'selfie')" hidden />
+  </label>
+
+</div>
+<button class="btn-primary" (click)="submitKyc()" [disabled]="loading">
+  {{ loading ? 'Enviando...' : 'Enviar KYC' }}
+</button>
+    </div>
+
+  </div>
+
+</ng-container>

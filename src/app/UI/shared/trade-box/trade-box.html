@@ -1,0 +1,54 @@
+<div class="trade-box">
+
+  <!-- SYMBOL -->
+  <div class="symbol">
+    {{ symbol }}
+  </div>
+
+  <!-- BALANCE -->
+  <div class="balance">
+    Balance: ${{ balance | number:'1.2-2' }}
+  </div>
+
+  <!-- BUY / SELL -->
+  <div class="tabs">
+    <button 
+      [class.active]="type === 'buy'"
+      (click)="type = 'buy'"
+    >Buy</button>
+
+    <button 
+      [class.active]="type === 'sell'"
+      (click)="type = 'sell'"
+    >Sell</button>
+  </div>
+
+  <!-- PRICE -->
+  <input 
+    *ngIf="orderType === 'limit'"
+    type="number"
+    [(ngModel)]="priceInput"
+    placeholder="Precio"
+  />
+
+  <!-- AMOUNT -->
+  <input 
+    type="number"
+    [(ngModel)]="amount"
+    placeholder="Cantidad"
+  />
+
+  <!-- TOTAL -->
+  <div class="total">
+    Total: {{ total | number:'1.2-2' }}
+  </div>
+
+  <!-- CTA -->
+  <button 
+    (click)="submit()"
+    [disabled]="!amount || (type === 'buy' && total > balance)"
+  >
+    {{ type === 'buy' ? 'Buy' : 'Sell' }} {{ symbol }}
+  </button>
+
+</div>
